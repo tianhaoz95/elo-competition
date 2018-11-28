@@ -24,5 +24,5 @@ def download_dataset():
 def load_dataset():
     print('Loading dataset ...')
     res = dataset.Dataset()
-    res.load_raw_dataset(config.dataset_root_dir, config.dataset_filenames)
+    res.load_raw_dataset(config.dataset_root_dir, config.dataset_meta)
     return res
