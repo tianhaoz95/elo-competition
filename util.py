@@ -1,28 +1,8 @@
-import os
-import urllib
 import config
 import dataset
 
-def create_dir_if_not_exist(directory):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-def download_if_not_exist(root_dir, url, filename):
-    abs_filename = os.path.join(root_dir, filename)
-    create_dir_if_not_exist(root_dir)
-    if not os.path.isfile(abs_filename):
-        urllib.request.urlretrieve(url, abs_filename)
-
-def download_dataset():
-    print('Downloading dataset ...')
-    dataset_file_cnt = len(config.dataset_filenames)
-    print('Found ' + str(dataset_file_cnt) + ' files in dataset')
-    for dataset_name, meta in config.dataset_meta.items():
-        print('Fetching ' + dataset_name + ' from ' + meta['download_url'] + ' as ' + meta['filename'])
-        download_if_not_exist(config.dataset_root_dir, meta['download_url'], meta['filename'])
-
-def load_dataset():
+def load_dataset(dataset_root):
     print('Loading dataset ...')
     res = dataset.Dataset()
-    res.load_raw_dataset(config.dataset_root_dir, config.dataset_meta)
+    res.load_raw_dataset(dataset_root, config.dataset_meta)
     return res
