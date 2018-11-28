@@ -14,4 +14,4 @@ class Dataset():
         self.raw_dataset[dataset_id] = raw_dataset_content
 
     def show_raw_brief(self, dataset_meta, dataset_id):
-        self.raw_dataset[dataset_id].head(5)
+        print(self.raw_dataset[dataset_id].head())
