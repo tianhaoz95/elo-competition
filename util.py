@@ -14,6 +14,10 @@ def download_if_not_exist(root_dir, url, filename):
 
 def download_dataset():
     print('Downloading dataset ...')
+    dataset_file_cnt = len(config.dataset_filenames)
+    for i in range(dataset_file_cnt):
+        print('fetching ' + config.dataset_filenames[i] + ' from ' + config.dataset_download_urls[i])
+        download_if_not_exist(config.dataset_root_dir, config.dataset_download_urls[i], config.dataset_filenames[i])
 
 def load_dataset():
     print('Loading dataset ...')

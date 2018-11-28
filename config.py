@@ -1,3 +1,5 @@
+dataset_root_dir = './elo-competition-dataset'
+
 dataset_filenames = [
     'historical_transactions.csv',
     'merchants.csv',
