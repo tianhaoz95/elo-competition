@@ -1,6 +1,7 @@
 import os
 import urllib
 import config
+import dataset
 
 def create_dir_if_not_exist(directory):
     if not os.path.exists(directory):
@@ -22,3 +23,6 @@ def download_dataset():
 
 def load_dataset():
     print('Loading dataset ...')
+    res = dataset.Dataset()
+    res.load_raw_dataset(config.dataset_root_dir, config.dataset_filenames)
+    return res
