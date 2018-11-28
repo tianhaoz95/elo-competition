@@ -19,7 +19,6 @@ dataset_download_urls = [
 ]
 
 dataset_meta = {
-    'root_dir': './elo-competition-dataset',
     'historical_transactions': {
         'download_url': 'https://www.kaggle.com/c/elo-merchant-category-recommendation/download/historical_transactions.csv',
         'filename': 'historical_transactions.csv'
