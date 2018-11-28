@@ -19,7 +19,7 @@ def download_dataset():
     print('Found ' + str(dataset_file_cnt) + ' files in dataset')
     for i in range(dataset_file_cnt):
         print('Fetching ' + config.dataset_filenames[i] + ' from ' + config.dataset_download_urls[i])
-        download_if_not_exist(config.dataset_root_dir, config.dataset_download_urls[i], config.dataset_filenames[i])
+        download_if_not_exist(config.dataset_meta['root_dir'], config.dataset_download_urls[i], config.dataset_filenames[i])
 
 def load_dataset():
     print('Loading dataset ...')
