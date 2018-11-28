@@ -15,3 +15,4 @@ class Dataset():
 
     def show_raw_brief(self, dataset_meta, dataset_id):
         print(self.raw_dataset[dataset_id].head())
+        print(dataset_id + ' dataset size: ' + str(len(self.raw_dataset[dataset_id])))
