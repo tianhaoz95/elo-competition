@@ -1,5 +1,6 @@
 import os
 import urllib
+import config
 
 def create_dir_if_not_exist(directory):
     if not os.path.exists(directory):
