@@ -10,3 +10,6 @@ class Dataset():
         print('Loading ' + dataset_id + ' from ' + abs_dataset_filename + '...')
         raw_dataset_content = pd.read_csv(abs_dataset_filename)
         self.raw_dataset[dataset_id] = raw_dataset_content
+        
+    def show_raw_brief(self, dataset_meta, dataset_id):
+        self.raw_dataset[dataset_id].head(5)
