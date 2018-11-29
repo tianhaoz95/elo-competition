@@ -18,5 +18,5 @@ class Dataset():
         dataset_size = len(self.raw_dataset[dataset_id])
         print(dataset_id + ' dataset size: ' + str(dataset_size))
 
-    def gather_sample(self):
+    def gather_raw_features(self, customer_id, feature_ids):
         pass
