@@ -53,24 +53,24 @@ class Dataset():
     
     def get_customer_id(self, training, index):
         if training:
-            return self.raw_dataset['train'][index]['customer_id']
+            return self.raw_dataset['train']['customer_id'][index]
         else:
-            return self.raw_dataset['test'][index]['customer_id']
+            return self.raw_dataset['test']['customer_id'][index]
 
     def get_feature_1(self, index, training, param):
         if training:
-            return self.raw_dataset['train'][index]['feature_1']
+            return self.raw_dataset['train']['feature_1'][index]
         else:
-            return self.raw_dataset['test'][index]['feature_1']
+            return self.raw_dataset['test']['feature_1'][index]
 
     def get_feature_2(self, index, training, param):
         if training:
-            return self.raw_dataset['train'][index]['feature_2']
+            return self.raw_dataset['train']['feature_2'][index]
         else:
-            return self.raw_dataset['test'][index]['feature_2']
+            return self.raw_dataset['test']['feature_2'][index]
 
     def get_feature_3(self, index, training, param):
         if training:
-            return self.raw_dataset['train'][index]['feature_3']
+            return self.raw_dataset['train']['feature_3'][index]
         else:
-            return self.raw_dataset['test'][index]['feature_3']
+            return self.raw_dataset['test']['feature_3'][index]
