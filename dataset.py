@@ -31,7 +31,7 @@ class Dataset():
         for feature_id in feature_ids:
             if feature_id in config.index_features:
                 res[feature_id] = self.get_raw_feature_by_index(index, feature_id, training, param)
-            else if feature_id in config.id_features:
+            elif feature_id in config.id_features:
                 customer_id = self.get_customer_id(training, index)
                 res[feature_id] = self.get_raw_feature_by_id(customer_id, feature_id, param)
             else:
@@ -41,9 +41,9 @@ class Dataset():
     def get_raw_feature_by_index(self, index, feature_id, training, param):
         if feature_id == 'feature_1':
             return self.get_feature_1(index, training, param)
-        else if feature_id == 'feature_2':
+        elif feature_id == 'feature_2':
             return self.get_feature_2(index, training, param)
-        else if feature_id == 'feature_3':
+        elif feature_id == 'feature_3':
             return self.get_feature_3(index, training, param)
         else:
             raise RuntimeError('unknown feature ID')
@@ -57,19 +57,19 @@ class Dataset():
         else:
             return self.raw_dataset['test'][index]['customer_id']
 
-    def get_feature_1(self, customer_id, training, param):
+    def get_feature_1(self, index, training, param):
         if training:
             return self.raw_dataset['train'][index]['feature_1']
         else:
             return self.raw_dataset['test'][index]['feature_1']
 
-    def get_feature_2(self, customer_id, training, param):
+    def get_feature_2(self, index, training, param):
         if training:
             return self.raw_dataset['train'][index]['feature_2']
         else:
             return self.raw_dataset['test'][index]['feature_2']
 
-    def get_feature_3(self, customer_id, training, param):
+    def get_feature_3(self, index, training, param):
         if training:
             return self.raw_dataset['train'][index]['feature_3']
         else:
