@@ -17,3 +17,6 @@ class Dataset():
         print(self.raw_dataset[dataset_id].head())
         dataset_size = len(self.raw_dataset[dataset_id])
         print(dataset_id + ' dataset size: ' + str(dataset_size))
+
+    def gather_sample(self):
+        pass
