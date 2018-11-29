@@ -19,7 +19,14 @@ class Dataset():
         dataset_size = len(self.raw_dataset[dataset_id])
         print(dataset_id + ' dataset size: ' + str(dataset_size))
 
-    def gather_raw_features(self, index, feature_ids, training, param=None):
+    def get_raw_batch(self, size, offset, feature_ids, training, param=None):
+        batch = []
+        for i in range(size):
+            raw_features = self.gather_raw_features(i + offset, feature_ids, training, param)
+            batch.append(raw_features)
+        return batch
+
+    def gather_raw_features(self, index, feature_ids, training, param):
         res = {}
         for feature_id in feature_ids:
             if feature_id in config.index_features:
@@ -27,20 +34,22 @@ class Dataset():
             else if feature_id in config.id_features:
                 customer_id = self.get_customer_id(training, index)
                 res[feature_id] = self.get_raw_feature_by_id(customer_id, feature_id, param)
+            else:
+                raise RuntimeError('unknown feature id')
         return res
     
     def get_raw_feature_by_index(self, index, feature_id, training, param):
         if feature_id == 'feature_1':
-            return self.get_feature_1(index, param)
+            return self.get_feature_1(index, training, param)
         else if feature_id == 'feature_2':
-            return self.get_feature_2(index, param)
+            return self.get_feature_2(index, training, param)
         else if feature_id == 'feature_3':
-            return self.get_feature_3(index, param)
+            return self.get_feature_3(index, training, param)
         else:
             raise RuntimeError('unknown feature ID')
 
     def get_raw_feature_by_id(self, customer_id, feature_id, param):
-        pass
+        return 0
     
     def get_customer_id(self, training, index):
         if training:
@@ -48,11 +57,20 @@ class Dataset():
         else:
             return self.raw_dataset['test'][index]['customer_id']
 
-    def get_feature_1(self, customer_id, param):
-        return 0
+    def get_feature_1(self, customer_id, training, param):
+        if training:
+            return self.raw_dataset['train'][index]['feature_1']
+        else:
+            return self.raw_dataset['test'][index]['feature_1']
 
-    def get_feature_2(self, customer_id, param):
-        return 0
+    def get_feature_2(self, customer_id, training, param):
+        if training:
+            return self.raw_dataset['train'][index]['feature_2']
+        else:
+            return self.raw_dataset['test'][index]['feature_2']
 
-    def get_feature_3(self, customer_id, param):
-        return 0
+    def get_feature_3(self, customer_id, training, param):
+        if training:
+            return self.raw_dataset['train'][index]['feature_3']
+        else:
+            return self.raw_dataset['test'][index]['feature_3']
