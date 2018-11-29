@@ -18,3 +18,20 @@ dataset_meta = {
         'filename': 'train.csv'
     }
 }
+
+index_features = [
+    'feature_1',
+    'feature_2',
+    'feature_3',
+    'target',
+    'card_id',
+    'first_active_month'
+]
+
+id_features = [
+    'city_id',
+    'category_1',
+    'category_2',
+    'category_3',
+    'installments'
+]
