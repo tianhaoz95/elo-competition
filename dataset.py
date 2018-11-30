@@ -45,8 +45,10 @@ class Dataset():
             return self.get_feature_2(index, training, param)
         elif feature_id == 'feature_3':
             return self.get_feature_3(index, training, param)
+        elif feature_id == 'target':
+            return self.get_target(index, training, param)
         else:
-            raise RuntimeError('unknown feature ID')
+            raise RuntimeError('unknown feature id')
 
     def get_raw_feature_by_id(self, customer_id, feature_id, param):
         return 0
@@ -74,3 +76,9 @@ class Dataset():
             return self.raw_dataset['train']['feature_3'][index]
         else:
             return self.raw_dataset['test']['feature_3'][index]
+
+    def get_target(self, index, training, param):
+        if training:
+            return self.raw_dataset['train']['target'][index]
+        else:
+            raise RuntimeError('no target in testing dataset')
