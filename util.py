@@ -1,5 +1,6 @@
 import config
 import dataset
+import model
 
 
 def common_routine(dataset_root):
