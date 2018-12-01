@@ -51,6 +51,8 @@ class Dataset():
             return self.get_feature_2(index, training, param)
         elif feature_id == 'feature_3':
             return self.get_feature_3(index, training, param)
+        elif feature_id == 'card_id':
+            return self.get_card_id(index, training, param)
         elif feature_id == 'target':
             return self.get_target(index, training, param)
         else:
@@ -82,6 +84,12 @@ class Dataset():
             return self.raw_dataset['train']['feature_3'][index]
         else:
             return self.raw_dataset['test']['feature_3'][index]
+
+    def get_card_id(self, index, training, param):
+        if training:
+            return self.raw_dataset['train']['card_id'][index]
+        else:
+            return self.raw_dataset['test']['card_id'][index]
 
     def get_target(self, index, training, param):
         if training:
