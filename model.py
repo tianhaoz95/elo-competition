@@ -26,9 +26,9 @@ class SanityCheckModel():
 
     def preprocess_raw_feature(self, raw_feature, training):
         feature = {'x': None, 'y': None}
-        feature_1 = raw_feature['feature_1']
-        feature_2 = raw_feature['feature_2']
-        feature_3 = raw_feature['feature_3']
+        feature_1 = raw_feature['feature_1'] / 10
+        feature_2 = raw_feature['feature_2'] / 10
+        feature_3 = raw_feature['feature_3'] / 10
         if training:
             target = raw_feature['target']
         feature['x'] = [feature_1, feature_2, feature_3]
@@ -71,4 +71,4 @@ class SanityCheckModel():
         card_ids = [feature['card_id'] for feature in raw_fearure_batch]
         df = pd.DataFrame({'card_id': card_ids, 'target': flat_predictions})
         output_path = os.path.join(output_dir, 'submission.csv')
-        df.to_csv(output_path)
+        df.to_csv(output_path, index=False)
