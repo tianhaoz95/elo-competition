@@ -47,7 +47,8 @@ class SanityCheckModel():
 
     def train(self, raw_fearure_batch):
         batch_feature = self.preprocess_batch(raw_fearure_batch)
-        self.kmodel.train_on_batch(batch_feature['x'], batch_feature['y'])
+        loss = self.kmodel.train_on_batch(batch_feature['x'], batch_feature['y'])
+        print('loss: ' + str(loss))
 
     def validate(self):
         pass
