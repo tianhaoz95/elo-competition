@@ -1,5 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.optimizers import SGD
 import numpy as np
 
 
@@ -49,12 +50,13 @@ class SanityCheckModel():
         kmodel.add(Dense(units=64, activation='relu', input_dim=3))
         kmodel.add(Dense(units=128, activation='relu'))
         kmodel.add(Dense(units=1, activation='linear'))
-        kmodel.compile(loss='mean_squared_error', optimizer='sgd')
+        sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+        kmodel.compile(loss='mean_squared_error', optimizer=sgd)
         self.kmodel = kmodel
 
     def train(self, raw_fearure_batch, epoch):
         batch_feature = self.preprocess_batch(raw_fearure_batch, True)
-        loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=1)
+        loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=1, epochs=epoch)
 
     def validate(self, raw_fearure_batch):
         batch_feature = self.preprocess_batch(raw_fearure_batch, True)
