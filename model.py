@@ -26,12 +26,14 @@ class SanityCheckModel():
 
     def preprocess_raw_feature(self, raw_feature, training):
         feature = {'x': None, 'y': None}
-        feature_1 = raw_feature['feature_1'] / 10
-        feature_2 = raw_feature['feature_2'] / 10
-        feature_3 = raw_feature['feature_3'] / 10
+        feature_1 = [0,0,0,0,0]
+        feature_1[raw_feature['feature_1']-1] = 1
+        feature_2 = [0,0,0]
+        feature_2[raw_feature['feature_2']-1] = 1
+        feature_3 = [raw_feature['feature_3']]
         if training:
             target = raw_feature['target']
-        feature['x'] = [feature_1, feature_2, feature_3]
+        feature['x'] = feature_1 + feature_2 + feature_3
         if training:
             feature['y'] = [target]
         return feature
@@ -49,7 +51,7 @@ class SanityCheckModel():
 
     def init_model(self, config=None):
         kmodel = Sequential()
-        kmodel.add(Dense(units=64, activation='relu', input_dim=3))
+        kmodel.add(Dense(units=64, activation='relu', input_dim=9))
         kmodel.add(Dense(units=128, activation='relu'))
         kmodel.add(Dense(units=1, activation='linear'))
         sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
