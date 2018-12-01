@@ -3,7 +3,7 @@ import dataset
 import model
 
 
-def common_routine(dataset_root):
+def common_routine(dataset_root, validation_size, batch_size, train_iter):
     dataset_object = dataset.Dataset()
     experiment_model = model.generate_model('sanity_check')
     experiment_model.init_model()
@@ -13,8 +13,13 @@ def common_routine(dataset_root):
     dataset_object.show_raw_brief(config.dataset_meta, 'train')
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'test')
     dataset_object.show_raw_brief(config.dataset_meta, 'test')
-    train_batch = dataset_object.get_raw_batch(10, 0, ['feature_1', 'feature_2', 'feature_3', 'target'], training=True)
-    experiment_model.train(train_batch, 10)
+    train_batch_size = dataset_object.get_size(True) - validation_size
+    count = 0
+    while count < train_batch_size:
+        size = min(batch_size, train_batch_size - count)
+        train_batch = dataset_object.get_raw_batch(size, count, ['feature_1', 'feature_2', 'feature_3', 'target'], training=True)
+        experiment_model.train(train_batch, train_iter)
+        count = count + batch_size
     experiment_model.validate(train_batch)
     test_batch = dataset_object.get_raw_batch(dataset_object.get_size(False), 0, ['feature_1', 'feature_2', 'feature_3'], training=False)
     experiment_model.test(test_batch)
