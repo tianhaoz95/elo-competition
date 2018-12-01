@@ -16,5 +16,5 @@ def common_routine(dataset_root):
     train_batch = dataset_object.get_raw_batch(10, 0, ['feature_1', 'feature_2', 'feature_3', 'target'], training=True)
     experiment_model.train(train_batch, 10)
     experiment_model.validate(train_batch)
-    test_batch = dataset_object.get_raw_batch(10, 0, ['feature_1', 'feature_2', 'feature_3'], training=False)
+    test_batch = dataset_object.get_raw_batch(dataset_object.get_size(False), 0, ['feature_1', 'feature_2', 'feature_3'], training=False)
     experiment_model.test(test_batch)

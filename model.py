@@ -64,4 +64,4 @@ class SanityCheckModel():
     
     def test(self, raw_fearure_batch):
         batch_feature = self.preprocess_batch(raw_fearure_batch, False)
-        predictions = self.kmodel.predict(batch_feature['x'])
+        predictions = self.kmodel.predict(batch_feature['x'], verbose=1)
