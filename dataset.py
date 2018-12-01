@@ -14,6 +14,12 @@ class Dataset():
         raw_dataset_content = pd.read_csv(abs_dataset_filename)
         self.raw_dataset[dataset_id] = raw_dataset_content
 
+    def get_size(training):
+        if training:
+            return len(self.raw_dataset['train'])
+        else:
+            return len(self.raw_dataset['test'])
+
     def show_raw_brief(self, dataset_meta, dataset_id):
         print(self.raw_dataset[dataset_id].head())
         dataset_size = len(self.raw_dataset[dataset_id])
