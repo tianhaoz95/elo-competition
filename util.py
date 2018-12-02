@@ -7,8 +7,6 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter):
     dataset_object = dataset.Dataset()
     experiment_model = model.generate_model('sanity_check')
     experiment_model.init_model()
-    training_features = experiment_model.get_target_ids()
-    testing_features = experiment_model.get_feature_ids()
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'train')
     dataset_object.show_raw_brief(config.dataset_meta, 'train')
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'test')
