@@ -54,8 +54,7 @@ class SanityCheckModel():
         kmodel.add(Dense(units=64, activation='relu', input_dim=9))
         kmodel.add(Dense(units=128, activation='relu'))
         kmodel.add(Dense(units=1, activation='linear'))
-        sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-        kmodel.compile(loss='mean_squared_error', optimizer=sgd)
+        kmodel.compile(loss='mean_squared_error', optimizer='sgd')
         self.kmodel = kmodel
 
     def train(self, raw_fearure_batch, epoch):
