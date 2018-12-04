@@ -10,18 +10,19 @@ import config
 import stats
 
 
-def generate_model(model_type, viz):
+def generate_model(model_type, viz, output_dir):
     if model_type == 'sanity_check':
-        return SanityCheckModel(viz)
+        return SanityCheckModel(viz, output_dir)
     else:
         raise RuntimeError('unknown model type')
 
 class SanityCheckModel():
-    def __init__(self, viz):
+    def __init__(self, viz, output_dir):
         self.feature_ids = ['feature_1', 'feature_2', 'feature_3', 'card_id', 'first_active_month', 'new_all']
         self.target_ids = ['target']
         self.kmodel = None
         self.viz = viz
+        self.output_dir = output_dir
     
     def get_feature_ids(self):
         return self.feature_ids
@@ -75,6 +76,8 @@ class SanityCheckModel():
             plt.plot(loss.history['loss'])
             plt.plot(loss.history['val_loss'])
             plt.show()
+        model_save_path = os.path.join(self.output_dir, 'model.h5')
+        self.kmodel.save(model_save_path)
 
     def validate(self, raw_fearure_batch):
         batch_feature = self.preprocess_batch(raw_fearure_batch, True)

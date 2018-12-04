@@ -106,3 +106,4 @@ venv.bak/
 # custom
 data/submission.csv
 data/raw_submission.csv
+data/model.h5
