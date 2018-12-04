@@ -120,6 +120,7 @@ class SanityCheckModel():
         return normalized_time
 
     def count_state_id(self, raw_new_all):
+        raw_new_all.reset_index()
         state_count = [0.0 for i in range(stats.state_id_count)]
         if len(raw_new_all) == 0:
             return state_count
