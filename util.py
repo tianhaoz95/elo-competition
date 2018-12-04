@@ -19,8 +19,10 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter):
         size = min(batch_size, train_batch_size - count)
         train_batch = dataset_object.get_raw_batch(size, count, experiment_model.get_target_ids(), training=True)
         experiment_model.train(train_batch, train_iter)
-        experiment_model.validate(validate_data)
+        train_err = experiment_model.validate(train_batch)
+        print('training error: ' + str(train_err))
+        test_err = experiment_model.validate(validate_data)
+        print('testing error: ' + str(test_err))
         count = count + batch_size
-    experiment_model.validate(train_batch)
     test_batch = dataset_object.get_raw_batch(dataset_object.get_size(False), 0, experiment_model.get_feature_ids(), training=False)
     experiment_model.test(test_batch, dataset_root)

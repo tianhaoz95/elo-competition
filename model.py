@@ -66,7 +66,7 @@ class SanityCheckModel():
     def validate(self, raw_fearure_batch):
         batch_feature = self.preprocess_batch(raw_fearure_batch, True)
         res = self.kmodel.evaluate(batch_feature['x'], batch_feature['y'], verbose=0)
-        print('validation result: ' + str(res))
+        return res
     
     def test(self, raw_fearure_batch, output_dir):
         batch_feature = self.preprocess_batch(raw_fearure_batch, False)
@@ -80,19 +80,12 @@ class SanityCheckModel():
         print('done!')
 
     def normalize_target(self, target):
-        normalized_target = 0.0
-        if target < stats.target_lowerbound:
-            normalized_target = -1.0
-        elif target > stats.target_upperbound:
-            normalized_target = 1.0
-        else:
-            normalized_target = target / stats.target_scale
-        return [normalized_target]
+        return [np.tanh(target)]
         
     def denormalize_target(self, targets):
         res = []
         for target in targets:
-            denormalized_target = target * stats.target_scale
+            denormalized_target = np.arctanh(target)
             res.append(denormalized_target)
         return res
     
