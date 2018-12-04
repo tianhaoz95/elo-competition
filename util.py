@@ -15,7 +15,7 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=Fa
     count = 0
     validate_data = dataset_object.get_raw_batch(validation_size, train_batch_size, experiment_model.get_target_ids(), training=True)
     while count < train_batch_size:
-        print('starting ' + str(count) + ' out of ' + str(train_batch_size))
+        print('starting ' + str(count) + ' out of ' + str(train_batch_size) + ', finishing ' + str(count/train_batch_size*100) + '% ...')
         size = min(batch_size, train_batch_size - count)
         train_batch = dataset_object.get_raw_batch(size, count, experiment_model.get_target_ids(), training=True)
         experiment_model.train(train_batch, train_iter)
