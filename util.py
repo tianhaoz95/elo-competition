@@ -3,7 +3,7 @@ import dataset
 import model
 
 
-def common_routine(dataset_root, validation_size, batch_size, train_iter):
+def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=False):
     dataset_object = dataset.Dataset()
     experiment_model = model.generate_model('sanity_check')
     experiment_model.init_model()

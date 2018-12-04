@@ -74,7 +74,7 @@ class SanityCheckModel():
         flat_predictions = [pred[0] for pred in predictions]
         denormalized_predictions = self.denormalize_target(flat_predictions)
         card_ids = [feature['card_id'] for feature in raw_fearure_batch]
-        df = pd.DataFrame({'card_id': card_ids, 'target': flat_predictions})
+        df = pd.DataFrame({'card_id': card_ids, 'target': denormalized_predictions})
         output_path = os.path.join(output_dir, 'submission.csv')
         df.to_csv(output_path, index=False)
         print('done!')
