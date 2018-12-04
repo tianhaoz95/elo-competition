@@ -4,6 +4,7 @@ from keras.optimizers import SGD
 import numpy as np
 import pandas as pd
 import os
+import stats
 
 
 def generate_model(model_type):
@@ -31,11 +32,10 @@ class SanityCheckModel():
         feature_2 = [0,0,0]
         feature_2[raw_feature['feature_2']-1] = 1
         feature_3 = [raw_feature['feature_3']]
-        if training:
-            target = raw_feature['target']
         feature['x'] = feature_1 + feature_2 + feature_3
         if training:
-            feature['y'] = [target]
+            target = raw_feature['target']
+            feature['y'] = self.normalize_target(target)
         return feature
     
     def preprocess_batch(self, raw_feature_batch, training):
@@ -70,7 +70,26 @@ class SanityCheckModel():
         batch_feature = self.preprocess_batch(raw_fearure_batch, False)
         predictions = self.kmodel.predict(batch_feature['x'], verbose=1)
         flat_predictions = [pred[0] for pred in predictions]
+        denormalized_predictions = self.denormalize_target(flat_predictions)
         card_ids = [feature['card_id'] for feature in raw_fearure_batch]
         df = pd.DataFrame({'card_id': card_ids, 'target': flat_predictions})
         output_path = os.path.join(output_dir, 'submission.csv')
         df.to_csv(output_path, index=False)
+
+    def normalize_target(self, target):
+        normalized_target = 0.0
+        if target < stats.target_lowerbound:
+            normalized_target = 0.0
+        elif target > stats.target_upperbound:
+            normalized_target = 1.0
+        else:
+            normalized_target = (target + stats.target_shift) / stats.target_scale
+        return [normalized_target]
+        
+    def denormalize_target(self, targets):
+        res = []
+        for target in targets:
+            denormalized_target = target * stats.target_scale - stats.target_shift
+            res.append(denormalized_target)
+        return res
+        
