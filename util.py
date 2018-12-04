@@ -13,7 +13,8 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=Fa
     train_batch_size = dataset_object.get_size(True) - validation_size
     count = 0
     validate_data = dataset_object.get_raw_batch(validation_size, train_batch_size, experiment_model.get_target_ids(), training=True)
-    test_batch = dataset_object.get_raw_batch(dataset_object.get_size(False), 0, experiment_model.get_feature_ids(), training=False)
+    # test_size = dataset_object.get_size(False)
+    # test_batch = dataset_object.get_raw_batch(test_size, 0, experiment_model.get_feature_ids(), training=False)
     while count < train_batch_size:
         print('starting ' + str(count) + ' out of ' + str(train_batch_size) + ', finishing ' + str(count/train_batch_size*100) + '% ...')
         size = min(batch_size, train_batch_size - count)
@@ -23,6 +24,6 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=Fa
         print('training error: ' + str(train_err))
         test_err = experiment_model.validate(validate_data)
         print('testing error: ' + str(test_err))
-        experiment_model.test(test_batch, dataset_root)
+        # experiment_model.test(test_batch, dataset_root)
         count = count + batch_size
     print('all finished!')
