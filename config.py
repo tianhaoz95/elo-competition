@@ -33,7 +33,8 @@ id_features = [
     'category_1',
     'category_2',
     'category_3',
-    'installments'
+    'installments',
+    'new_all'
 ]
 
 date_format = '%Y-%m'

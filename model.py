@@ -17,7 +17,7 @@ def generate_model(model_type, viz):
 
 class SanityCheckModel():
     def __init__(self, viz):
-        self.feature_ids = ['feature_1', 'feature_2', 'feature_3', 'card_id', 'first_active_month']
+        self.feature_ids = ['feature_1', 'feature_2', 'feature_3', 'card_id', 'first_active_month', 'new_all']
         self.target_ids = ['target']
         self.kmodel = None
         self.viz = viz
@@ -36,7 +36,9 @@ class SanityCheckModel():
         feature_2[raw_feature['feature_2'] - 1] = 1
         feature_3 = [raw_feature['feature_3']]
         first_active_month = self.convert_first_active_month(raw_feature['first_active_month'])
-        feature['x'] = feature_1 + feature_2 + feature_3 + first_active_month
+        raw_new_all = raw_feature['new_all']
+        state_feature = self.count_state_id(raw_new_all)
+        feature['x'] = feature_1 + feature_2 + feature_3 + first_active_month + state_feature
         if training:
             target = raw_feature['target']
             feature['y'] = self.normalize_target(target)
@@ -55,7 +57,7 @@ class SanityCheckModel():
 
     def init_model(self, config=None):
         kmodel = Sequential()
-        kmodel.add(Dense(units=64, activation='relu', input_dim=10))
+        kmodel.add(Dense(units=64, activation='relu', input_dim=35))
         kmodel.add(Dense(units=64, activation='relu'))
         kmodel.add(BatchNormalization())
         kmodel.add(Dense(units=32, activation='relu'))
@@ -116,4 +118,16 @@ class SanityCheckModel():
     def normalize_first_active_month(self, timestamp):
         normalized_time = (timestamp - stats.min_timestamp) / stats.timespan
         return normalized_time
+
+    def count_state_id(self, raw_new_all):
+        state_count = [0.0 for i in range(stats.state_id_count)]
+        if len(raw_new_all) == 0:
+            return state_count
+        trans_count = float(len(raw_new_all))
+        for i in range(len(raw_new_all)):
+            int_state_id = int(raw_new_all['state_id'])
+            index = int_state_id if int_state_id != -1 else 0
+            state_count[index] = state_count[index] + 1.0
+        normalized_state_feature = [cnt / trans_count for cnt in state_count]
+        return normalized_state_feature
 

@@ -8,9 +8,11 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=Fa
     experiment_model = model.generate_model('sanity_check', viz)
     experiment_model.init_model()
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'train')
-    dataset_object.show_raw_brief(config.dataset_meta, 'train')
+    # dataset_object.show_raw_brief(config.dataset_meta, 'train')
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'test')
-    dataset_object.show_raw_brief(config.dataset_meta, 'test')
+    # dataset_object.show_raw_brief(config.dataset_meta, 'test')
+    dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'new_merchant_transactions')
+    # dataset_object.show_raw_brief(config.dataset_meta, 'new_merchant_transactions')
     train_batch_size = dataset_object.get_size(True) - validation_size
     count = 0
     validate_data = dataset_object.get_raw_batch(validation_size, train_batch_size, experiment_model.get_target_ids(), training=True)

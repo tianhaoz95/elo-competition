@@ -38,8 +38,8 @@ class Dataset():
             if feature_id in config.index_features:
                 res[feature_id] = self.get_raw_feature_by_index(index, feature_id, training, param)
             elif feature_id in config.id_features:
-                customer_id = self.get_customer_id(training, index)
-                res[feature_id] = self.get_raw_feature_by_id(customer_id, feature_id, param)
+                card_id = self.get_customer_id(training, index)
+                res[feature_id] = self.get_raw_feature_by_id(card_id, feature_id, param)
             else:
                 raise RuntimeError('unknown feature id')
         return res
@@ -60,14 +60,15 @@ class Dataset():
         else:
             raise RuntimeError('unknown feature id')
 
-    def get_raw_feature_by_id(self, customer_id, feature_id, param):
-        return 0
+    def get_raw_feature_by_id(self, card_id, feature_id, param):
+        matches = self.raw_dataset['new_merchant_transactions'].loc[self.raw_dataset['new_merchant_transactions']['card_id'] == card_id]
+        return matches
     
     def get_customer_id(self, training, index):
         if training:
-            return self.raw_dataset['train']['customer_id'][index]
+            return self.raw_dataset['train']['card_id'][index]
         else:
-            return self.raw_dataset['test']['customer_id'][index]
+            return self.raw_dataset['test']['card_id'][index]
 
     def get_feature_1(self, index, training, param):
         if training:

@@ -7,3 +7,6 @@ target_upperbound = 10.0
 target_lowerbound = -10.0
 target_shift = 10.0
 target_scale = 10.0
+
+# from 1 to 24 and -1
+state_id_count = 25
