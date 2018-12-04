@@ -2,6 +2,7 @@ from keras.models import Sequential
 from keras.layers.normalization import BatchNormalization
 from keras.layers import Dense
 from keras.optimizers import SGD
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import os
@@ -68,7 +69,12 @@ class SanityCheckModel():
 
     def train(self, raw_fearure_batch, epoch):
         batch_feature = self.preprocess_batch(raw_fearure_batch, True)
-        loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=0, epochs=epoch)
+        loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=0, epochs=epoch, validation_split=0.15)
+        if self.viz:
+            plt.figure()
+            plt.plot(loss.history['loss'])
+            plt.plot(loss.history['val_loss'])
+            plt.show()
 
     def validate(self, raw_fearure_batch):
         batch_feature = self.preprocess_batch(raw_fearure_batch, True)
