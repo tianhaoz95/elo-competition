@@ -10,10 +10,10 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=Fa
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'train')
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'test')
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'new_merchant_transactions')
-    train_batch_size = dataset_object.get_size(True) - validation_size
+    train_batch_size = dataset_object.get_size(training=True) - validation_size
     count = 0
     validate_data = dataset_object.get_raw_batch(validation_size, train_batch_size, experiment_model.get_target_ids(), training=True)
-    # test_size = dataset_object.get_size(False)
+    # test_size = dataset_object.get_size(training=False)
     # test_batch = dataset_object.get_raw_batch(test_size, 0, experiment_model.get_feature_ids(), training=False)
     while count < train_batch_size:
         print('starting ' + str(count) + ' out of ' + str(train_batch_size) + ', finishing ' + str(count/train_batch_size*100) + '% ...')

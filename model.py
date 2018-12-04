@@ -84,7 +84,7 @@ class SanityCheckModel():
         res = self.kmodel.evaluate(batch_feature['x'], batch_feature['y'], verbose=0)
         return res
     
-    def test(self, raw_fearure_batch, output_dir):
+    def test(self, raw_fearure_batch):
         batch_feature = self.preprocess_batch(raw_fearure_batch, False)
         predictions = self.kmodel.predict(batch_feature['x'], verbose=0)
         flat_predictions = [pred[0] for pred in predictions]
@@ -92,8 +92,8 @@ class SanityCheckModel():
         card_ids = [feature['card_id'] for feature in raw_fearure_batch]
         df = pd.DataFrame({'card_id': card_ids, 'target': denormalized_predictions})
         raw_df = pd.DataFrame({'card_id': card_ids, 'target': flat_predictions})
-        raw_output_path = os.path.join(output_dir, 'raw_submission.csv')
-        output_path = os.path.join(output_dir, 'submission.csv')
+        raw_output_path = os.path.join(self.output_dir, 'raw_submission.csv')
+        output_path = os.path.join(self.output_dir, 'submission.csv')
         raw_df.to_csv(raw_output_path, index=False)
         df.to_csv(output_path, index=False)
         print('done!')
