@@ -55,6 +55,8 @@ class Dataset():
             return self.get_card_id(index, training, param)
         elif feature_id == 'target':
             return self.get_target(index, training, param)
+        elif feature_id == 'first_active_month':
+            return self.get_first_active_month(index, training, param)
         else:
             raise RuntimeError('unknown feature id')
 
@@ -84,6 +86,12 @@ class Dataset():
             return self.raw_dataset['train']['feature_3'][index]
         else:
             return self.raw_dataset['test']['feature_3'][index]
+
+    def get_first_active_month(self, index, training, param):
+        if training:
+            return self.raw_dataset['train']['first_active_month'][index]
+        else:
+            return self.raw_dataset['test']['first_active_month'][index]
 
     def get_card_id(self, index, training, param):
         if training:

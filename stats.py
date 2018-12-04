@@ -6,4 +6,4 @@ guess_timestamp = 1418774400.0
 target_upperbound = 10.0
 target_lowerbound = -10.0
 target_shift = 10.0
-target_scale = 20.0
+target_scale = 10.0

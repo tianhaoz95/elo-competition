@@ -13,11 +13,13 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter):
     dataset_object.show_raw_brief(config.dataset_meta, 'test')
     train_batch_size = dataset_object.get_size(True) - validation_size
     count = 0
+    validate_data = dataset_object.get_raw_batch(validation_size, train_batch_size, experiment_model.get_target_ids(), training=True)
     while count < train_batch_size:
         print('starting ' + str(count) + ' out of ' + str(train_batch_size))
         size = min(batch_size, train_batch_size - count)
         train_batch = dataset_object.get_raw_batch(size, count, experiment_model.get_target_ids(), training=True)
         experiment_model.train(train_batch, train_iter)
+        experiment_model.validate(validate_data)
         count = count + batch_size
     experiment_model.validate(train_batch)
     test_batch = dataset_object.get_raw_batch(dataset_object.get_size(False), 0, experiment_model.get_feature_ids(), training=False)
