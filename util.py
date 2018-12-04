@@ -3,9 +3,9 @@ import dataset
 import model
 
 
-def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=False):
+def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=False, output_dir='./'):
     dataset_object = dataset.Dataset()
-    experiment_model = model.generate_model('sanity_check', viz, dataset_root)
+    experiment_model = model.generate_model('sanity_check', viz, output_dir)
     experiment_model.init_model()
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'train')
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'test')
