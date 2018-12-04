@@ -5,7 +5,7 @@ import model
 
 def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=False):
     dataset_object = dataset.Dataset()
-    experiment_model = model.generate_model('sanity_check')
+    experiment_model = model.generate_model('sanity_check', viz)
     experiment_model.init_model()
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'train')
     dataset_object.show_raw_brief(config.dataset_meta, 'train')
