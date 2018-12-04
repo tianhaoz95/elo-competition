@@ -6,6 +6,7 @@
 import sys
 from google.colab import drive
 drive.mount('/content/gdrive')
+%matplotlib inline
 
 !rm -rf elo-competition
 !git clone https://github.com/tianhaoz95/elo-competition.git
