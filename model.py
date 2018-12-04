@@ -125,6 +125,9 @@ class SanityCheckModel():
             return state_count
         trans_count = float(len(raw_new_all))
         for i in range(len(raw_new_all)):
+            print(raw_new_all)
+            print(raw_new_all['state_id'])
+            print(raw_new_all['state_id'][i])
             int_state_id = int(raw_new_all['state_id'][i])
             index = int_state_id if int_state_id != -1 else 0
             state_count[index] = state_count[index] + 1.0
