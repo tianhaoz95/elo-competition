@@ -120,16 +120,12 @@ class SanityCheckModel():
         return normalized_time
 
     def count_state_id(self, raw_new_all):
-        raw_new_all.reset_index()
         state_count = [0.0 for i in range(stats.state_id_count)]
         if len(raw_new_all) == 0:
             return state_count
         trans_count = float(len(raw_new_all))
-        for i in range(len(raw_new_all)):
-            print(raw_new_all)
-            print(raw_new_all['state_id'])
-            print(raw_new_all['state_id'][i])
-            int_state_id = int(raw_new_all['state_id'][i])
+        for index, row in raw_new_all.iterrows():
+            int_state_id = int(row['state_id'])
             index = int_state_id if int_state_id != -1 else 0
             state_count[index] = state_count[index] + 1.0
         normalized_state_feature = [cnt / trans_count for cnt in state_count]
