@@ -79,17 +79,19 @@ class SanityCheckModel():
         kmodel.compile(loss='mean_squared_error', optimizer='sgd')
         self.kmodel = kmodel
 
-    def train(self, raw_fearure_batch, validate_feature_batch=None, epoch=32):
+    def train(self, raw_fearure_batch, validate_feature_batch=None, epochs=32):
         batch_feature = self.preprocess_batch(raw_fearure_batch, True)
+        val_batch_feature = self.preprocess_batch(validate_feature_batch, True)
         loss = None
         if validate_feature_batch is None:
-            loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=0, epochs=epoch, validation_split=0.15)
+            loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=0, epochs=epochs, validation_split=0.15)
         else:
-            loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=0, epochs=epoch, validation_data=(validate_feature_batch['x'], validate_feature_batch['y']))
+            loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=0, epochs=epochs, validation_data=(val_batch_feature['x'], val_batch_feature['y']))
         if self.viz:
             plt.figure()
-            plt.plot(loss.history['loss'])
-            plt.plot(loss.history['val_loss'])
+            plt.plot(loss.history['loss'], label='train loss')
+            plt.plot(loss.history['val_loss'], label='test loss')
+            plt.legend()
             plt.show()
         model_save_path = os.path.join(self.output_dir, 'model.h5')
         self.kmodel.save(model_save_path)
