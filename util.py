@@ -15,16 +15,17 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=Fa
     train_batch_size = dataset_object.get_size(training=True) - validation_size
     count = 0
     validate_data = dataset_object.get_raw_batch(validation_size, train_batch_size, experiment_model.get_target_ids(), training=True)
-    while count < train_batch_size:
-        print('starting ' + str(count) + ' out of ' + str(train_batch_size) + ', finishing ' + str(count/train_batch_size*100) + '% ...')
-        size = min(batch_size, train_batch_size - count)
-        train_batch = dataset_object.get_raw_batch(size, count, experiment_model.get_target_ids(), training=True)
-        experiment_model.train(train_batch, train_iter)
-        train_err = experiment_model.validate(train_batch)
-        print('training error: ' + str(train_err))
-        test_err = experiment_model.validate(validate_data)
-        print('testing error: ' + str(test_err))
-        count = count + batch_size
+    if train:
+        while count < train_batch_size:
+            print('starting ' + str(count) + ' out of ' + str(train_batch_size) + ', finishing ' + str(count/train_batch_size*100) + '% ...')
+            size = min(batch_size, train_batch_size - count)
+            train_batch = dataset_object.get_raw_batch(size, count, experiment_model.get_target_ids(), training=True)
+            experiment_model.train(train_batch, train_iter)
+            train_err = experiment_model.validate(train_batch)
+            print('training error: ' + str(train_err))
+            test_err = experiment_model.validate(validate_data)
+            print('testing error: ' + str(test_err))
+            count = count + batch_size
     if test:
         test_routine(dataset_object, experiment_model, batch_size, output_dir)
     print('all finished!')
