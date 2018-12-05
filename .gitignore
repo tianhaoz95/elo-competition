@@ -104,6 +104,6 @@ venv.bak/
 .mypy_cache/
 
 # custom
-data/submission.csv
-data/raw_submission.csv
+submission.csv
+raw_submission.csv
 model.h5

@@ -90,13 +90,8 @@ class SanityCheckModel():
         flat_predictions = [pred[0] for pred in predictions]
         denormalized_predictions = self.denormalize_target(flat_predictions)
         card_ids = [feature['card_id'] for feature in raw_fearure_batch]
-        df = pd.DataFrame({'card_id': card_ids, 'target': denormalized_predictions})
-        raw_df = pd.DataFrame({'card_id': card_ids, 'target': flat_predictions})
-        raw_output_path = os.path.join(self.output_dir, 'raw_submission.csv')
-        output_path = os.path.join(self.output_dir, 'submission.csv')
-        raw_df.to_csv(raw_output_path, index=False)
-        df.to_csv(output_path, index=False)
-        print('done!')
+        res = {'raw': flat_predictions, 'denormalized': denormalized_predictions, 'card_id': card_ids}
+        return res
 
     def normalize_target(self, target):
         return [np.tanh(target)]
