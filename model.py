@@ -79,9 +79,13 @@ class SanityCheckModel():
         kmodel.compile(loss='mean_squared_error', optimizer='sgd')
         self.kmodel = kmodel
 
-    def train(self, raw_fearure_batch, epoch):
+    def train(self, raw_fearure_batch, validate_feature_batch=None, epoch=32):
         batch_feature = self.preprocess_batch(raw_fearure_batch, True)
-        loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=0, epochs=epoch, validation_split=0.15)
+        loss = None
+        if validate_feature_batch is None:
+            loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=0, epochs=epoch, validation_split=0.15)
+        else:
+            loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=0, epochs=epoch, validation_data=(validate_feature_batch['x'], validate_feature_batch['y']))
         if self.viz:
             plt.figure()
             plt.plot(loss.history['loss'])
