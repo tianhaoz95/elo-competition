@@ -12,10 +12,12 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=Fa
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'train')
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'test')
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'new_merchant_transactions')
+    print('dataset files loaded')
     train_batch_size = dataset_object.get_size(training=True) - validation_size
     count = 0
     validate_data = dataset_object.get_raw_batch(validation_size, train_batch_size, experiment_model.get_target_ids(), training=True)
     if train:
+        print('start training ...')
         while count < train_batch_size:
             print('starting ' + str(count) + ' out of ' + str(train_batch_size) + ', finishing ' + str(count/train_batch_size*100) + '% ...')
             size = min(batch_size, train_batch_size - count)
@@ -31,6 +33,7 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=Fa
     print('all finished!')
 
 def test_routine(dataset_object, experiment_model, batch_size, output_dir):
+    print('start testing ...')
     test_size = dataset_object.get_size(training=False)
     count = 0
     raw_predictions = []
