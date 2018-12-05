@@ -2,6 +2,7 @@ from keras.models import Sequential
 from keras.layers.normalization import BatchNormalization
 from keras.layers import Dense
 from keras.optimizers import SGD
+from keras.models import load_model
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -57,7 +58,17 @@ class SanityCheckModel():
         batch_feature = {'x': np.array(batch_feature_x), 'y': np.array(batch_feature_y)}
         return batch_feature
 
-    def init_model(self, config=None):
+    def init_model(self, load_trained_model, config=None):
+        if load_trained_model:
+            model_path = os.path.join(self.output_dir, 'model.h5')
+            print('loading model from ' + model_path)
+            self.kmodel = load_model(model_path)
+        else:
+            print('constructing model ...')
+            self.compose_model(config)
+        print('model initialized')
+    
+    def compose_model(self, config):
         kmodel = Sequential()
         kmodel.add(Dense(units=64, activation='relu', input_dim=35))
         kmodel.add(Dense(units=64, activation='relu'))
