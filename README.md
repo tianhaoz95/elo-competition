@@ -18,6 +18,10 @@ import util
 dataset_root = 'gdrive/My Drive/Development/elo-competition/workspace/dataset'
 dataset = util.common_routine(dataset_root, 10000, 10000, 100)
 ```
+## Phases
+* Have a complete feature set for training. No new feature will be needed after this phase theoretically.
+* Model optimization where a couple of models are manually crafted and tested.
+* Automatic model exploration. Read papers on auto model space exploration, source code from auto keras, etc
 
 ## Roadmap
 - [x] Infrastructure and sanity check model with only `feature_1, feature_1, feature_1`
