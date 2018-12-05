@@ -42,7 +42,7 @@ def test_routine(dataset_object, experiment_model, batch_size, output_dir):
     while count < test_size:
         print('starting ' + str(count) + ' out of ' + str(test_size) + ', finishing ' + str(count/test_size*100) + '% ...')
         size = min(batch_size, test_size - count)
-        test_batch = dataset_object.get_raw_batch(batch_size, count, experiment_model.get_feature_ids(), training=False)
+        test_batch = dataset_object.get_raw_batch(size, count, experiment_model.get_feature_ids(), training=False)
         predictions = experiment_model.test(test_batch)
         raw_predictions = raw_predictions + predictions['raw']
         card_ids = card_ids + predictions['card_id']
