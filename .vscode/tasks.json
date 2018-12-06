@@ -4,7 +4,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "run local sanity test",
+            "label": "local test (Mac)",
+            "type": "shell",
+            "group": "build",
+            "command": "python3 local.py"
+        },
+        {
+            "label": "local test (Windows)",
             "type": "shell",
             "group": "build",
             "command": "python local.py"
