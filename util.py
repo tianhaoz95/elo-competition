@@ -5,7 +5,7 @@ import os
 import pandas as pd
 
 
-def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=False, output_dir='./', test=True, train=True, load_trained_model=False):
+def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=False, output_dir='./', test=True, train=True, load_trained_model=False, train_limit=None):
     dataset_object = dataset.Dataset()
     experiment_model = model.generate_model('sanity_check', viz, output_dir)
     experiment_model.init_model(load_trained_model)
@@ -14,19 +14,22 @@ def common_routine(dataset_root, validation_size, batch_size, train_iter, viz=Fa
     dataset_object.load_raw_dataset(dataset_root, config.dataset_meta, 'new_merchant_transactions')
     print('dataset files loaded')
     if train:
-        train_routine(dataset_object, experiment_model, batch_size, output_dir, validation_size, train_iter)
+        train_routine(dataset_object, experiment_model, batch_size, output_dir, validation_size, train_iter, train_limit)
     if test:
         test_routine(dataset_object, experiment_model, batch_size, output_dir)
     print('all finished!')
 
-def train_routine(dataset_object, experiment_model, batch_size, output_dir, validation_size, train_iter):
+def train_routine(dataset_object, experiment_model, batch_size, output_dir, validation_size, train_iter, train_limit):
     train_batch_size = dataset_object.get_size(training=True) - validation_size
     validate_data = dataset_object.get_raw_batch(validation_size, train_batch_size, experiment_model.get_target_ids(), training=True)
     print('start training ...')
     count = 0
-    while count < train_batch_size:
-        print('starting ' + str(count) + ' out of ' + str(train_batch_size) + ', finishing ' + str(count/train_batch_size*100) + '% ...')
-        size = min(batch_size, train_batch_size - count)
+    actual_train_batch_size = train_batch_size
+    if train_limit is not None:
+        actual_train_batch_size = min(train_limit, train_batch_size)
+    while count < actual_train_batch_size:
+        print('starting ' + str(count) + ' out of ' + str(actual_train_batch_size) + ', finishing ' + str(count/actual_train_batch_size*100) + '% ...')
+        size = min(batch_size, actual_train_batch_size - count)
         train_batch = dataset_object.get_raw_batch(size, count, experiment_model.get_target_ids(), training=True)
         experiment_model.train(train_batch, epochs=train_iter, validate_feature_batch=validate_data)
         train_err = experiment_model.validate(train_batch)
