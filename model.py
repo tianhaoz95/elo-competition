@@ -25,6 +25,7 @@ class SanityCheckModel():
         self.kmodel = None
         self.viz = viz
         self.output_dir = output_dir
+        self.history_val_loss = []
     
     def get_feature_ids(self):
         return self.feature_ids
@@ -90,11 +91,17 @@ class SanityCheckModel():
             loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=0, epochs=epochs, validation_split=0.15)
         else:
             loss = self.kmodel.fit(batch_feature['x'], batch_feature['y'], verbose=0, epochs=epochs, validation_data=(val_batch_feature['x'], val_batch_feature['y']))
+        self.history_val_loss = self.history_val_loss + loss.history['val_loss']
         if self.viz:
             plt.figure()
             plt.plot(loss.history['loss'], label='train loss')
             plt.plot(loss.history['val_loss'], label='test loss')
+            plt.title('Local Loss')
             plt.legend()
+            plt.show()
+            plt.figure()
+            plt.plot(self.history_val_loss)
+            plt.title('History Validation Loss')
             plt.show()
         model_save_path = os.path.join(self.output_dir, 'model.h5')
         self.kmodel.save(model_save_path)
