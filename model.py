@@ -195,6 +195,6 @@ class SanityCheckModel():
                 res[2] = res[2] + 1.0
             else:
                 pass
-        normalized_res = [r / totoal for r in res]
+        normalized_res = [r / total for r in res]
         return normalized_res
 
