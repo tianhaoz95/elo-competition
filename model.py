@@ -3,6 +3,7 @@ from keras.layers.normalization import BatchNormalization
 from keras.layers import Dense
 from keras.optimizers import SGD
 from keras.models import load_model
+from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -41,7 +42,10 @@ class SanityCheckModel():
         first_active_month = self.convert_first_active_month(raw_feature['first_active_month'])
         raw_new_all = raw_feature['new_all']
         state_feature = self.count_state_id(raw_new_all)
-        feature['x'] = feature_1 + feature_2 + feature_3 + first_active_month + state_feature
+        category_1_feature = self.convert_category_1(raw_new_all)
+        category_2_feature = self.convert_category_2(raw_new_all)
+        category_3_feature = self.convert_category_3(raw_new_all)
+        feature['x'] = feature_1 + feature_2 + feature_3 + first_active_month + state_feature + category_1_feature + category_2_feature + category_3_feature
         if training:
             target = raw_feature['target']
             feature['y'] = self.normalize_target(target)
@@ -70,9 +74,8 @@ class SanityCheckModel():
     
     def compose_model(self, config):
         kmodel = Sequential()
-        kmodel.add(Dense(units=64, activation='relu', input_dim=35))
+        kmodel.add(Dense(units=64, activation='relu', input_dim=44))
         kmodel.add(Dense(units=64, activation='relu'))
-        kmodel.add(BatchNormalization())
         kmodel.add(Dense(units=32, activation='relu'))
         kmodel.add(BatchNormalization())
         kmodel.add(Dense(units=1, activation='tanh'))
@@ -145,10 +148,53 @@ class SanityCheckModel():
         if len(raw_new_all) == 0:
             return state_count
         trans_count = float(len(raw_new_all))
-        for index, row in raw_new_all.iterrows():
+        for idx, row in raw_new_all.iterrows():
             int_state_id = int(row['state_id'])
             index = int_state_id if int_state_id != -1 else 0
             state_count[index] = state_count[index] + 1.0
         normalized_state_feature = [cnt / trans_count for cnt in state_count]
         return normalized_state_feature
+
+    def convert_category_1(self, raw_new_all):
+        total = len(raw_new_all)
+        if total == 0:
+            return [0]
+        yes_count = 0
+        for idx, row in raw_new_all.iterrows():
+            category_1 = row['category_1']
+            if category_1 == 'Y':
+                yes_count = yes_count + 1
+        ratio = yes_count / total
+        return [ratio]
+    
+    def convert_category_2(self, raw_new_all):
+        total = len(raw_new_all)
+        res = [0 for i in range(stats.category_2_count)]
+        if total == 0:
+            return res
+        for idx, row in raw_new_all.iterrows():
+            category_2 = row['category_2']
+            if not np.isnan(category_2):
+                index = int(category_2) - 1
+                res[index] = res[index] + 1.0
+        normalized_res = [r / total for r in res]
+        return normalized_res
+
+    def convert_category_3(self, raw_new_all):
+        total = len(raw_new_all)
+        res = [0 for i in range(stats.category_3_count)]
+        if total == 0:
+            return res
+        for idx, row in raw_new_all.iterrows():
+            category_3 = row['category_3']
+            if category_3 == 'A':
+                res[0] = res[0] + 1.0
+            elif category_3 == 'B':
+                res[1] = res[1] + 1.0
+            elif category_3 == 'C':
+                res[2] = res[2] + 1.0
+            else:
+                pass
+        normalized_res = [r / totoal for r in res]
+        return normalized_res
 
