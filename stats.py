@@ -12,3 +12,4 @@ target_scale = 10.0
 state_id_count = 25
 category_2_count = 5
 category_3_count = 3
+subsector_id_count = 42

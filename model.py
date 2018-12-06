@@ -1,6 +1,6 @@
 from keras.models import Sequential
 from keras.layers.normalization import BatchNormalization
-from keras.layers import Dense
+from keras.layers import Dense, Dropout
 from keras.optimizers import SGD
 from keras.models import load_model
 from datetime import datetime
@@ -46,7 +46,11 @@ class SanityCheckModel():
         category_1_feature = self.convert_category_1(raw_new_all)
         category_2_feature = self.convert_category_2(raw_new_all)
         category_3_feature = self.convert_category_3(raw_new_all)
-        feature['x'] = feature_1 + feature_2 + feature_3 + first_active_month + state_feature + category_1_feature + category_2_feature + category_3_feature
+        subsector_id_feature = self.convert_subsector_id(raw_new_all)
+        feature['x'] = feature_1 + feature_2 + feature_3
+        feature['x'] = feature['x']  + first_active_month + state_feature
+        feature['x'] = feature['x']  + category_1_feature + category_2_feature
+        feature['x'] = feature['x']  + category_3_feature + subsector_id_feature
         if training:
             target = raw_feature['target']
             feature['y'] = self.normalize_target(target)
@@ -75,8 +79,11 @@ class SanityCheckModel():
     
     def compose_model(self, config):
         kmodel = Sequential()
-        kmodel.add(Dense(units=64, activation='relu', input_dim=44))
+        kmodel.add(Dense(units=128, activation='relu', input_dim=86))
+        kmodel.add(Dense(units=256, activation='relu'))
+        kmodel.add(Dropout(rate=0.15))
         kmodel.add(Dense(units=64, activation='relu'))
+        kmodel.add(Dropout(rate=0.15))
         kmodel.add(Dense(units=32, activation='relu'))
         kmodel.add(BatchNormalization())
         kmodel.add(Dense(units=1, activation='tanh'))
@@ -202,6 +209,18 @@ class SanityCheckModel():
                 res[2] = res[2] + 1.0
             else:
                 pass
+        normalized_res = [r / total for r in res]
+        return normalized_res
+    
+    def convert_subsector_id(self, raw_new_all):
+        total = len(raw_new_all)
+        res = [0 for i in range(stats.subsector_id_count)]
+        if total == 0:
+            return res
+        for idx, row in raw_new_all.iterrows():
+            subsector_id = int(row['subsector_id'])
+            index = subsector_id if subsector_id != -1 else 0
+            res[index] = res[index] + 1.0
         normalized_res = [r / total for r in res]
         return normalized_res
 
