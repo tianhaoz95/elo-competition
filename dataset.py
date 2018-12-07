@@ -1,6 +1,7 @@
 import os
 import config
 import pandas as pd
+import numpy as np
 
 
 class Dataset():
@@ -25,10 +26,17 @@ class Dataset():
         dataset_size = len(self.raw_dataset[dataset_id])
         print(dataset_id + ' dataset size: ' + str(dataset_size))
 
-    def get_raw_batch(self, size, offset, feature_ids, training, param=None):
+    def get_raw_batch_from_range(self, size, offset, feature_ids, training, param=None):
         batch = []
         for i in range(size):
             raw_features = self.gather_raw_features(i + offset, feature_ids, training, param)
+            batch.append(raw_features)
+        return batch
+
+    def get_raw_batch_from_indexes(self, indexes, feature_ids, training=True, param=None):
+        batch = []
+        for idx in indexes:
+            raw_features = self.gather_raw_features(idx, feature_ids, training, param)
             batch.append(raw_features)
         return batch
 

@@ -47,7 +47,9 @@ class SanityCheckModel():
         category_2_feature = self.convert_category_2(raw_new_all)
         category_3_feature = self.convert_category_3(raw_new_all)
         subsector_id_feature = self.convert_subsector_id(raw_new_all)
-        feature['x'] = feature_1 + feature_2 + feature_3
+        installments_feature = self.convert_installment(raw_new_all)
+        feature['x'] = []
+        # feature['x'] = feature['x']  + feature_1 + feature_2 + feature_3
         feature['x'] = feature['x']  + first_active_month + state_feature
         feature['x'] = feature['x']  + category_1_feature + category_2_feature
         feature['x'] = feature['x']  + category_3_feature + subsector_id_feature
@@ -79,14 +81,14 @@ class SanityCheckModel():
     
     def compose_model(self, config):
         kmodel = Sequential()
-        kmodel.add(Dense(units=128, activation='relu', input_dim=86))
+        kmodel.add(Dense(units=128, activation='relu', input_dim=77))
         kmodel.add(Dense(units=256, activation='relu'))
-        kmodel.add(Dropout(rate=0.15))
+        kmodel.add(Dropout(rate=0.1))
         kmodel.add(Dense(units=64, activation='relu'))
-        kmodel.add(Dropout(rate=0.15))
+        kmodel.add(Dropout(rate=0.1))
         kmodel.add(Dense(units=32, activation='relu'))
         kmodel.add(BatchNormalization())
-        kmodel.add(Dense(units=1, activation='tanh'))
+        kmodel.add(Dense(units=1, activation='linear'))
         kmodel.compile(loss='mean_squared_error', optimizer='sgd')
         self.kmodel = kmodel
 
@@ -128,18 +130,15 @@ class SanityCheckModel():
         return res
 
     def normalize_target(self, target):
-        return [np.tanh(target)]
+        return target
         
     def denormalize_target(self, targets):
         res = []
         for target in targets:
-            if target <= -1.0:
-                res.append(stats.target_upperbound)
-            elif target >= 1.0:
-                res.append(stats.target_lowerbound)
+            if target < -10.0:
+                res.append(-33.21928095)
             else:
-                denormalized_target = np.arctanh(target)
-                res.append(denormalized_target)
+                res.append(target)
         return res
     
     def convert_first_active_month(self, date_str):
@@ -220,6 +219,22 @@ class SanityCheckModel():
         for idx, row in raw_new_all.iterrows():
             subsector_id = int(row['subsector_id'])
             index = subsector_id if subsector_id != -1 else 0
+            res[index] = res[index] + 1.0
+        normalized_res = [r / total for r in res]
+        return normalized_res
+
+    def convert_installment(self, raw_new_all):
+        total = len(raw_new_all)
+        res = [0 for i in range(stats.installments_count)]
+        if total == 0:
+            return res
+        for idx, row in raw_new_all.iterrows():
+            installments = int(row['installments'])
+            index = installments
+            if installments == -1:
+                index = 13
+            if installments == 999:
+                index = 14
             res[index] = res[index] + 1.0
         normalized_res = [r / total for r in res]
         return normalized_res
