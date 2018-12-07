@@ -30,7 +30,7 @@ def train_random_routine(dataset_object, experiment_model, batch_size, output_di
     for i in range(train_iter):
         print('starting ' + str(i) + ' out of ' + str(train_iter) + ', finishing ' + str(i/train_iter*100) + '% ...')
         train_batch = dataset_object.get_raw_batch_from_indexes(np.random.randint(low=0, high=train_batch_size, size=batch_size), experiment_model.get_target_ids(), training=True)
-        experiment_model.train(train_batch, epochs=train_iter, validate_feature_batch=validate_data)
+        experiment_model.train(train_batch, epochs=50, validate_feature_batch=validate_data)
         train_err = experiment_model.validate(train_batch)
         print('training error: ' + str(train_err))
         test_err = experiment_model.validate(validate_data)
